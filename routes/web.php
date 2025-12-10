@@ -10,8 +10,8 @@ Route::get('/', function () {
 
 // Admin Routes
 Route::prefix('admin')->group(function () {
-    Route::get('/alogin', [AuthController::class, 'showAdminLogin'])->name('admin.login');
-    Route::post('/alogin', [AuthController::class, 'adminLogin'])->name('admin.login.post');
+    Route::get('/admin', [AuthController::class, 'showAdminLogin'])->name('admin.login');
+    Route::post('/admin', [AuthController::class, 'adminLogin'])->name('admin.login.post');
 
     // Protected admin routes
     Route::middleware('admin.auth')->group(function () {
