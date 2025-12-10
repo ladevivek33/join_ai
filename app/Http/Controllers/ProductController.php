@@ -37,4 +37,18 @@ class ProductController extends Controller
 
         return redirect()->route('admin.dashboard')->with('success', 'Product added successfully!');
     }
+    // Delete product
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+
+        // Delete image if exists
+        if ($product->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->image)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully!');
+    }
 }

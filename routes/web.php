@@ -10,8 +10,8 @@ Route::get('/', function () {
 
 // Admin Routes
 Route::prefix('admin')->group(function () {
-    Route::get('/admin', [AuthController::class, 'showAdminLogin'])->name('admin.login');
-    Route::post('/admin', [AuthController::class, 'adminLogin'])->name('admin.login.post');
+    Route::get('/alogin', [AuthController::class, 'showAdminLogin'])->name('admin.login');
+    Route::post('/alogin', [AuthController::class, 'adminLogin'])->name('admin.login.post');
 
     // Protected admin routes
     Route::middleware('admin.auth')->group(function () {
@@ -21,6 +21,10 @@ Route::prefix('admin')->group(function () {
         // Product Routes
         Route::get('/add-product', [\App\Http\Controllers\ProductController::class, 'showAddForm'])->name('admin.product.create');
         Route::post('/add-product', [\App\Http\Controllers\ProductController::class, 'store'])->name('admin.product.store');
+        Route::delete('/product/{id}', [\App\Http\Controllers\ProductController::class, 'destroy'])->name('admin.product.delete');
+
+        // Request Routes
+        Route::delete('/request/{id}', [AuthController::class, 'deleteRequest'])->name('admin.request.delete');
 
         Route::post('/logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
     });

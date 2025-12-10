@@ -17,6 +17,8 @@
             <p>Member since {{ now()->format('M Y') }}</p>
         </div>
 
+        <div id="message-container"></div>
+
         @if(session('success'))
             <div class="alert alert-success" style="color: green; background-color: #d4edda; border-color: #c3e6cb; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
                 {{ session('success') }}
@@ -40,7 +42,14 @@
                             <p>Price: ${{ number_format($product->price, 2) }}</p>
                             <p>Available: {{ $product->qty }}</p>
                             
-                            <form action="{{ route('user.request.product') }}" method="POST" style="margin-top: 10px;">
+                            @if(isset($requests[$product->id]))
+                                <div class="mt-2" style="background-color: #e2e3e5; padding: 5px; border-radius: 4px; margin-bottom: 10px;">
+                                    <strong>Requested:</strong> {{ $requests[$product->id]->qty }} <br>
+                                    <span class="badge bg-info">{{ ucfirst($requests[$product->id]->status) }}</span>
+                                </div>
+                            @endif
+                            
+                            <form action="{{ route('user.request.product') }}" method="POST" class="request-form" style="margin-top: 10px;">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <input type="number" name="qty" min="1" max="{{ $product->qty }}" value="1" style="width: 60px; padding: 5px; margin-bottom: 5px;" required>
@@ -57,6 +66,40 @@
             <button type="submit" class="btn btn-logout">Logout</button>
         </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.request-form').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = form.serialize();
+                var msgContainer = $('#message-container');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if(response.success) {
+                            msgContainer.html('<div class="alert alert-success" style="color: green; background-color: #d4edda; border-color: #c3e6cb; padding: 10px; margin-bottom: 20px; border-radius: 5px;">' + response.message + '</div>');
+                        } else {
+                            msgContainer.html('<div class="alert alert-danger" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: 10px; margin-bottom: 20px; border-radius: 5px;">' + response.message + '</div>');
+                        }
+                    },
+                    error: function(xhr) {
+                         var errors = xhr.responseJSON.errors;
+                         var errorMsg = 'An error occurred.';
+                         if(errors) {
+                             errorMsg = Object.values(errors).flat().join('<br>');
+                         } else if (xhr.responseJSON.message) {
+                             errorMsg = xhr.responseJSON.message;
+                         }
+                         msgContainer.html('<div class="alert alert-danger" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: 10px; margin-bottom: 20px; border-radius: 5px;">' + errorMsg + '</div>');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
