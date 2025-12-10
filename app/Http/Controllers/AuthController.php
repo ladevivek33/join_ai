@@ -9,7 +9,7 @@ class AuthController extends Controller
     // Show admin login form
     public function showAdminLogin()
     {
-        return view('auth.alogin'); 
+        return view('auth.alogin');
     }
 
     // Handle admin login
@@ -34,7 +34,9 @@ class AuthController extends Controller
     public function adminDashboard()
     {
         $users = \App\Models\User::all();
-        return view('admin.dashboard', compact('users'));
+        $products = \App\Models\Product::all();
+        $requests = \App\Models\ProductRequest::with(['user', 'product'])->get();
+        return view('admin.dashboard', compact('users', 'products', 'requests'));
     }
 
     // Show user details
@@ -42,6 +44,15 @@ class AuthController extends Controller
     {
         $user = \App\Models\User::findOrFail($id);
         return view('admin.user_details', compact('user'));
+    }
+
+    // Delete product request
+    public function deleteRequest($id)
+    {
+        $request = \App\Models\ProductRequest::findOrFail($id);
+        $request->delete();
+
+        return redirect()->route('admin.dashboard')->with('success', 'Request deleted successfully!');
     }
 
     // Admin logout

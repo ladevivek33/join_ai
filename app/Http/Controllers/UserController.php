@@ -68,10 +68,14 @@ class UserController extends Controller
 
     // Show user dashboard
     // Show user dashboard
+    // Show user dashboard
     public function dashboard()
     {
         $products = Product::all();
-        return view('user.dashboard', compact('products'));
+        $requests = ProductRequest::where('user_id', session('user_id'))
+            ->get()
+            ->keyBy('product_id');
+        return view('user.dashboard', compact('products', 'requests'));
     }
 
     // Handle product request
@@ -82,6 +86,16 @@ class UserController extends Controller
             'qty' => 'required|integer|min:1',
         ]);
 
+        $product = Product::find($request->product_id);
+
+        if ($request->qty > $product->qty) {
+            return response()->json([
+                'success' => false,
+                'message' =>
+                    'Requested quantity exceeds available stock.'
+            ], 400);
+        }
+
         ProductRequest::create([
             'user_id' => session('user_id'),
             'product_id' => $request->product_id,
@@ -89,7 +103,7 @@ class UserController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->back()->with('success', 'Product requested successfully!');
+        return response()->json(['success' => true, 'message' => 'Product requested successfully!']);
     }
 
     // User logout
