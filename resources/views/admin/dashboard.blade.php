@@ -36,7 +36,7 @@
             <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                     <thead>
-                        <tr style="background: #f8f9fa;">
+                        <tr style="">
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">ID</th>
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Name</th>
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Username</th>
@@ -75,7 +75,7 @@
             <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                     <thead>
-                        <tr style="background: #f8f9fa;">
+                        <tr style="">
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">ID</th>
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Image</th>
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Name</th>
@@ -118,7 +118,7 @@
             <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                     <thead>
-                        <tr style="background: #f8f9fa;">
+                        <tr style="">
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">ID</th>
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">User</th>
                             <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Product</th>
